@@ -1,24 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Footer from './Components/Layout/Footer';
+import Home from './Pages/Home/Home';
+import About from './Pages/About/About';
+import JobListings from './Pages/JobListings/JobListings';
+import Contact from './Pages/Contacts/Contacts';
+import CompanyShowcase from './Pages/CompanyShowcase/CompanyShowcase';
+import LoginPage from './Pages/Auth/LoginPage';
+
+const theme = createTheme();
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/jobs" element={<JobListings />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/companies" element={<CompanyShowcase />} />
+        </Routes>
+        <Footer />
+      </Router>
+    </ThemeProvider>
   );
 }
 
