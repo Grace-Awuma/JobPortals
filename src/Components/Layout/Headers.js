@@ -14,7 +14,7 @@ const Header = () => {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Job Portal
+          JobScape
         </Typography>
         <Box>
           <Button color="inherit" component={Link} to="/home">Home</Button>
