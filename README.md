@@ -1,70 +1,62 @@
-# Getting Started with Create React App
+# React Job Portal
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Overview
 
-## Available Scripts
+This project is a comprehensive job portal developed using React, Material UI, and Axios. It offers a user-friendly interface for job seekers to explore job listings and company profiles.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- User authentication (login functionality)
+- Job listings with search functionality
+- Company showcase
+- About page
+- Contact page
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technical Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- React
+- Material UI
+- Axios for API calls
+- React Router for navigation
 
-### `npm test`
+## Project Structure
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The project follows a component-based architecture with the following main pages:
 
-### `npm run build`
+- Home
+- About
+- Job Listings
+- Company Showcase
+- Contact
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Each component is stored in its own folder within the `src/components` directory.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Setup and Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Start the development server: `npm start`
 
-### `npm run eject`
+## API Integration
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+The project uses Axios to make API calls. The base URL and login function are defined in `src/api/index.js`.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Routing
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+React Router is used for navigation between different pages of the application.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Styling
 
-## Learn More
+Material UI components are used throughout the application for consistent and responsive design.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Authentication
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+User authentication is implemented using stored usernames and passwords. The login functionality is connected to the backend from a previous assignment.
 
-### Code Splitting
+## Version Control
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The project is maintained using Git. A `.gitignore` file is included to exclude `node_modules` and other non-essential files.
 
-### Analyzing the Bundle Size
+## Future Improvements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project will be further improved in the future. The current structure allows for easy expansion and addition of new features.
