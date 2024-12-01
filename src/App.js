@@ -10,6 +10,8 @@ import Contact from './Pages/Contacts/Contacts';
 import CompanyShowcase from './Pages/CompanyShowcase/CompanyShowcase';
 import LoginPage from './Pages/Auth/LoginPage';
 import AdminPage from './Pages/AdminPage/AdminPage';
+import AdminPrivateRoute from './Pages/HOC/AdminPrivateRoute';
+import UserPrivateRoute from './Pages/HOC/UserPrivateRoute';
 
 const theme = createTheme();
 
@@ -19,13 +21,40 @@ function App() {
       <CssBaseline />
       <Router>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/jobs" element={<JobListings />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/companies" element={<CompanyShowcase />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/" element={ <LoginPage /> } />
+          <Route path="/home" element={
+            <UserPrivateRoute>
+              <Home />
+            </UserPrivateRoute>
+          } />
+          <Route path="/about" element={
+            <UserPrivateRoute>
+              <About />
+            </UserPrivateRoute>
+          } />
+          <Route path="/jobs" element={
+            <UserPrivateRoute>
+              <JobListings />
+            </UserPrivateRoute>
+          } />
+          <Route path="/contact" element={
+            <UserPrivateRoute>
+              <Contact />
+            </UserPrivateRoute>
+          } />
+          <Route path="/companies" element={
+            <UserPrivateRoute>
+              <CompanyShowcase />
+            </UserPrivateRoute>
+          } />
+          <Route
+            path="/admin"
+            element={
+              <AdminPrivateRoute>
+                <AdminPage />
+              </AdminPrivateRoute>
+            }
+          />
         </Routes>
         <Footer />
       </Router>

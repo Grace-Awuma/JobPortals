@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -14,58 +14,20 @@ import {
 } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import Header from '../../Components/Layout/Headers';
+import { getAllJobs } from '../../Api';
 
-const jobListings = [
-  {
-    id: 1,
-    title: 'Full Stack Developer',
-    description: 'Join our dynamic team to work on cutting-edge technologies. Develop and maintain sophisticated web applications for our diverse client base.',
-    lastUpdated: 'Last updated 2 days ago',
-    applyLink: 'https://example.com/apply/full-stack-developer',
-  },
-  {
-    id: 2,
-    title: 'Data Scientist',
-    description: 'Exciting opportunity for a skilled data scientist to work on groundbreaking AI projects. Apply machine learning techniques to solve complex business problems.',
-    lastUpdated: 'Last updated 3 days ago',
-    applyLink: 'https://example.com/apply/data-scientist',
-  },
-  {
-    id: 3,
-    title: 'UX/UI Designer',
-    description: 'We are looking for a creative UX/UI designer to craft intuitive and visually appealing interfaces for our web and mobile applications.',
-    lastUpdated:'Last updated 1 day ago',
-    applyLink: 'https://example.com/apply/ux-ui-designer',
-  },
-  
-  {
-    id: 4,
-    title: 'DevOps Engineer',
-    description: 'Join our DevOps team to streamline our development processes, manage cloud infrastructure, and implement robust CI/CD pipelines.',
-    lastUpdated: 'Last updated 4 days ago',
-    applyLink: 'https://example.com/apply/devops-engineer',
-  },
-
-  {
-    id: 5,
-    title: 'Blockchain Developer',
-    description: 'Exciting role for a blockchain enthusiast to develop decentralized applications and smart contracts for our fintech products.',
-    lastUpdated: 'Last updated 2 days ago',
-    applyLink: 'https://example.com/apply/blockchain-developer',
-  },
-
-  {
-    id: 6,
-    title: 'Machine Learning Engineer',
-    description: 'We are seeking a talented ML engineer to develop and deploy advanced machine learning models for our AI-driven products.',
-    lastUpdated: 'Last updated 1 day ago',
-    applyLink: 'https://example.com/apply/machine-learning-engineer',
-  },
-];
 
 function JobListings() {
   const theme = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
+  const [jobListings, setJobListings] = useState([]);
+
+
+  useEffect(() => {
+    getAllJobs().then((jobs) => {
+      setJobListings(jobs?.data?.jobs || []);
+    });
+  }, []);
 
   const filteredJobs = jobListings.filter(job =>
     job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -115,10 +77,10 @@ function JobListings() {
                   </Typography>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'space-between', padding: '16px' }}>
-                  <Button size="small" color="primary">
-                    Learn More
+                  <Button size="small" disabled color="primary">
+                     {job.name}
                   </Button>
-                  <Button size="small" color="primary" variant="contained" href={job.applyLink} target="_blank" rel="noopener noreferrer">
+                  <Button size="small" color="primary" variant="contained" href={""} target="_blank" rel="noopener noreferrer">
                     Apply Now
                   </Button>
                 </CardActions>

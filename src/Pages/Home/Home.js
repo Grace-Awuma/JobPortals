@@ -13,6 +13,7 @@ import {
 import Header from '../../Components/Layout/Headers';
 import { Link } from 'react-router-dom';
 import Image1 from '../../assets/Image1.webp';
+import { useSelector } from 'react-redux';
 
 const BackgroundImage = styled(Box)({
   position: 'fixed',
@@ -37,6 +38,9 @@ const StyledCard = styled(Card)(({ theme }) => ({
 const Home = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+
+  const user = useSelector((state) => state.user.user.user.user);
 
   return (
     <Box sx={{ minHeight: '100vh', position: 'relative' }}>
@@ -69,20 +73,39 @@ const Home = () => {
               >
                 Find Jobs
               </Button>
+
+              {user?.isAdmin &&
+              <Button 
+                component={Link}
+                to="/admin"
+                variant="contained" 
+                color="secondary" 
+                size="large"
+                sx={{ 
+                  borderRadius: '50px',
+                  px: 4,
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  fontWeight: 'bold',
+                  '&:hover': { backgroundColor: theme.palette.secondary.light }
+                }}
+              >
+                Dashboard
+              </Button>
+           }
               <Button 
                 component={Link}
                 to="/companies"
-                variant="outlined" 
+                variant="contained" 
                 size="large"
                 sx={{ 
-                  color: 'white', 
                   borderColor: 'white',
                   borderRadius: '50px',
                   px: 4,
                   py: 1.5,
                   fontSize: '1.1rem',
                   fontWeight: 'bold',
-                  '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' }
+                  '&:hover': { backgroundColor: theme.palette.secondary.light }
                 }}
               >
                 Explore Companies

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Drawer,
@@ -9,64 +9,77 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  TextField,
-  Button,
   Container,
   Grid,
-  Paper,
+  TextField,
+  Button,
+  Snackbar,
+  Alert,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-} from '@mui/material'
-import { Add as AddIcon, Work as WorkIcon, Image as ImageIcon, Description as DescriptionIcon } from '@mui/icons-material'
+  Paper,
+} from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
+import { Add as AddIcon, Group as GroupIcon } from '@mui/icons-material';
+import { createJobs, getAllUsers } from '../../Api';
 
-export default function AdminPage() {
-  const [selectedTab, setSelectedTab] = useState('createJob')
-  const [jobs, setJobs] = useState([])
-  const [newJob, setNewJob] = useState({
-    title: '',
-    company: '',
-    description: '',
-    applyLink: '',
-  })
-  const [companyImage, setCompanyImage] = useState(null)
+export default function AdminPortal() {
+  const [selectedTab, setSelectedTab] = useState('createJobs');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [employees, setEmployees] = useState([]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setNewJob(prev => ({ ...prev, [name]: value }))
-  }
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-  const handleImageUpload = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setCompanyImage(e.target.files[0])
+  const onSubmit = async (data) => {
+    const payLoad = {
+      title: data.title,
+      description: data.description,
+      name: data.name,
+      salary: data.salary,
     }
-  }
-
-  const handleCreateJob = () => {
-    const job = {
-      ...newJob,
-      id: Date.now(),
-      lastUpdated: new Date().toISOString(),
+    try {
+      const res = await createJobs(payLoad);
+      if (res.status !== 201) throw new Error('Failed to create job');
+      setSuccessMessage('Job created successfully!');
+      reset(); // Reset the form fields
+    } catch (error) {
+      setErrorMessage(error.message);
     }
-    setJobs(prev => [...prev, job])
-    setNewJob({ title: '', company: '', description: '', applyLink: '' })
-    setCompanyImage(null)
-  }
+  };
 
-  const drawerWidth = 240
+  useEffect(() => {
+    getAllUsers().then((user) => {
+      setEmployees(user?.data?.data)
+    })
+  }, [selectedTab])
+
+  console.log("employees", employees)
+
+  
+  const drawerWidth = 240;
 
   return (
     <Box sx={{ display: 'flex' }}>
+      {/* App Bar */}
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap>
             Admin Dashboard
           </Typography>
         </Toolbar>
       </AppBar>
+
+      {/* Side Navigation */}
       <Drawer
         variant="permanent"
         sx={{
@@ -76,112 +89,148 @@ export default function AdminPage() {
         }}
       >
         <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
-          <List>
-            {['Create Job', 'Manage Jobs'].map((text, index) => (
-              <ListItem
-                button
-                key={text}
-                onClick={() => setSelectedTab(text.toLowerCase().replace(' ', ''))}
-              >
-                <ListItemIcon>
-                  {index % 2 === 0 ? <AddIcon /> : <WorkIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
+        <List>
+          <ListItem button onClick={() => setSelectedTab('createJobs')}>
+            <ListItemIcon>
+              <AddIcon />
+            </ListItemIcon>
+            <ListItemText primary="Create Jobs" />
+          </ListItem>
+          <ListItem button onClick={() => setSelectedTab('viewEmployees')}>
+            <ListItemIcon>
+              <GroupIcon />
+            </ListItemIcon>
+            <ListItemText primary="View Employees" />
+          </ListItem>
+        </List>
       </Drawer>
+
+      {/* Main Content */}
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        {selectedTab === 'createJob' && (
+
+        {/* Create Jobs Tab */}
+        {selectedTab === 'createJobs' && (
           <Container>
             <Typography variant="h4" gutterBottom>
-              Create a New Job
+              Create Job
             </Typography>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Job Title"
-                  name="title"
-                  value={newJob.title}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Company"
-                  name="company"
-                  value={newJob.company}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Description"
-                  name="description"
-                  multiline
-                  rows={4}
-                  value={newJob.description}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <input
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  id="company-logo-upload"
-                  type="file"
-                  onChange={handleImageUpload}
-                />
-                <label htmlFor="company-logo-upload">
-                  <Button variant="contained" component="span" startIcon={<ImageIcon />}>
-                    Upload Company Logo
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Controller
+                    name="name"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: 'Company name is required',
+                      minLength: { value: 3, message: 'Minimum 3 characters required' },
+                    }}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        fullWidth
+                        label="Company Name"
+                        error={!!errors.companyName}
+                        helperText={errors.companyName?.message}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Controller
+                    name="title"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: 'Job title is required',
+                      minLength: { value: 5, message: 'Minimum 5 characters required' },
+                    }}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        fullWidth
+                        label="Job Title"
+                        error={!!errors.jobTitle}
+                        helperText={errors.jobTitle?.message}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Controller
+                    name="description"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: 'Description is required',
+                      minLength: { value: 10, message: 'Minimum 10 characters required' },
+                    }}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        fullWidth
+                        label="Description"
+                        multiline
+                        rows={4}
+                        error={!!errors.description}
+                        helperText={errors.description?.message}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Controller
+                    name="salary"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: 'Salary is required',
+                      validate: (value) => value > 0 || 'Salary must be greater than 0',
+                    }}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        fullWidth
+                        label="Salary"
+                        type="number"
+                        error={!!errors.salary}
+                        helperText={errors.salary?.message}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button variant="contained" type="submit" fullWidth>
+                    Save Job
                   </Button>
-                </label>
-                {companyImage && <Typography variant="body2">{companyImage.name}</Typography>}
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <Button variant="contained" onClick={handleCreateJob} startIcon={<AddIcon />}>
-                  Create Job
-                </Button>
-              </Grid>
-            </Grid>
+            </form>
           </Container>
         )}
-        {selectedTab === 'manageJobs' && (
+
+        {/* View Employees Tab */}
+        {selectedTab === 'viewEmployees' && (
           <Container>
             <Typography variant="h4" gutterBottom>
-              Manage Jobs
+              Employees
             </Typography>
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Title</TableCell>
-                    <TableCell>Company</TableCell>
-                    <TableCell>Last Updated</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Type</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {jobs.map((job) => (
-                    <TableRow key={job.id}>
-                      <TableCell>{job.title}</TableCell>
-                      <TableCell>{job.company}</TableCell>
-                      <TableCell>{new Date(job.lastUpdated).toLocaleDateString()}</TableCell>
-                      <TableCell>
-                        <Button size="small" startIcon={<DescriptionIcon />}>
-                          View
-                        </Button>
-                        <Button size="small" color="secondary">
-                          Edit
-                        </Button>
-                      </TableCell>
+                  {employees.map((employee) => (
+                    <TableRow key={employee._id}>
+                      <TableCell>{employee.fullName}</TableCell>
+                      <TableCell>{employee.email}</TableCell>
+                      <TableCell>{employee.isAdmin === true ? 'Admin' : 'User'}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -189,7 +238,27 @@ export default function AdminPage() {
             </TableContainer>
           </Container>
         )}
+
+        {/* Snackbars */}
+        <Snackbar
+          open={!!successMessage}
+          autoHideDuration={6000}
+          onClose={() => setSuccessMessage('')}
+        >
+          <Alert severity="success" onClose={() => setSuccessMessage('')}>
+            {successMessage}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={!!errorMessage}
+          autoHideDuration={6000}
+          onClose={() => setErrorMessage('')}
+        >
+          <Alert severity="error" onClose={() => setErrorMessage('')}>
+            {errorMessage}
+          </Alert>
+        </Snackbar>
       </Box>
     </Box>
-  )
+  );
 }
