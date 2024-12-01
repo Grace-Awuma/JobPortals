@@ -9,6 +9,7 @@ import JobListings from './Pages/JobListings/JobListings';
 import Contact from './Pages/Contacts/Contacts';
 import CompanyShowcase from './Pages/CompanyShowcase/CompanyShowcase';
 import LoginPage from './Pages/Auth/LoginPage';
+import AdminPage from './Pages/AdminPage/AdminPage';
 
 const theme = createTheme();
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/jobs" element={<JobListings />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/companies" element={<CompanyShowcase />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
         <Footer />
       </Router>

@@ -7,69 +7,59 @@ import {
   CardContent,
   CardActions,
   Button,
-  Chip,
   TextField,
   InputAdornment,
   Box,
   useTheme,
 } from '@mui/material';
-import { Search, LocationOn, Work } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import Header from '../../Components/Layout/Headers';
 
 const jobListings = [
   {
     id: 1,
-    title: 'Senior React Developer',
-    company: 'TechCorp',
-    location: 'San Francisco, CA',
-    type: 'Full-time',
-    description: 'We are seeking an experienced React developer to lead our front-end team.',
-    skills: ['React', 'Redux', 'JavaScript', 'Node.js'],
+    title: 'Full Stack Developer',
+    description: 'Join our dynamic team to work on cutting-edge technologies. Develop and maintain sophisticated web applications for our diverse client base.',
+    lastUpdated: 'Last updated 2 days ago',
+    applyLink: 'https://example.com/apply/full-stack-developer',
   },
   {
     id: 2,
     title: 'Data Scientist',
-    company: 'AI Innovations',
-    location: 'New York, NY',
-    type: 'Full-time',
-    description: 'Join our team to work on cutting-edge machine learning projects.',
-    skills: ['Python', 'TensorFlow', 'SQL', 'Data Visualization'],
+    description: 'Exciting opportunity for a skilled data scientist to work on groundbreaking AI projects. Apply machine learning techniques to solve complex business problems.',
+    lastUpdated: 'Last updated 3 days ago',
+    applyLink: 'https://example.com/apply/data-scientist',
   },
   {
     id: 3,
-    title: 'DevOps Engineer',
-    company: 'CloudSolutions',
-    location: 'Seattle, WA',
-    type: 'Full-time',
-    description: 'Help us build and maintain our cloud infrastructure and CI/CD pipelines.',
-    skills: ['AWS', 'Docker', 'Kubernetes', 'Jenkins'],
+    title: 'UX/UI Designer',
+    description: 'We are looking for a creative UX/UI designer to craft intuitive and visually appealing interfaces for our web and mobile applications.',
+    lastUpdated:'Last updated 1 day ago',
+    applyLink: 'https://example.com/apply/ux-ui-designer',
   },
+  
   {
     id: 4,
-    title: 'UX/UI Designer',
-    company: 'DesignMasters',
-    location: 'Los Angeles, CA',
-    type: 'Full-time',
-    description: 'Create beautiful and intuitive user interfaces for our web and mobile applications.',
-    skills: ['Figma', 'Adobe XD', 'Sketch', 'User Research'],
+    title: 'DevOps Engineer',
+    description: 'Join our DevOps team to streamline our development processes, manage cloud infrastructure, and implement robust CI/CD pipelines.',
+    lastUpdated: 'Last updated 4 days ago',
+    applyLink: 'https://example.com/apply/devops-engineer',
   },
+
   {
     id: 5,
     title: 'Blockchain Developer',
-    company: 'CryptoTech',
-    location: 'Miami, FL',
-    type: 'Full-time',
-    description: 'Develop and implement blockchain solutions for our fintech products.',
-    skills: ['Solidity', 'Ethereum', 'Smart Contracts', 'Web3.js'],
+    description: 'Exciting role for a blockchain enthusiast to develop decentralized applications and smart contracts for our fintech products.',
+    lastUpdated: 'Last updated 2 days ago',
+    applyLink: 'https://example.com/apply/blockchain-developer',
   },
+
   {
     id: 6,
-    title: 'Full Stack Java Developer',
-    company: 'Enterprise Solutions',
-    location: 'Chicago, IL',
-    type: 'Full-time',
-    description: 'Build robust enterprise applications using Java and related technologies.',
-    skills: ['Java', 'Spring Boot', 'React', 'MySQL'],
+    title: 'Machine Learning Engineer',
+    description: 'We are seeking a talented ML engineer to develop and deploy advanced machine learning models for our AI-driven products.',
+    lastUpdated: 'Last updated 1 day ago',
+    applyLink: 'https://example.com/apply/machine-learning-engineer',
   },
 ];
 
@@ -79,8 +69,7 @@ function JobListings() {
 
   const filteredJobs = jobListings.filter(job =>
     job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    job.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()))
+    job.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -97,7 +86,7 @@ function JobListings() {
         <TextField
           fullWidth
           variant="outlined"
-          placeholder="Search for jobs, companies, or skills"
+          placeholder="Search for jobs or skills"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           sx={{ mb: 4, mt: 2, backgroundColor: 'white' }}
@@ -118,28 +107,18 @@ function JobListings() {
                   <Typography gutterBottom variant="h5" component="h2">
                     {job.title}
                   </Typography>
-                  <Typography variant="subtitle1" color="textSecondary" gutterBottom>
-                    <Work fontSize="small" sx={{ mr: 1, verticalAlign: 'middle' }} />
-                    {job.company}
-                  </Typography>
-                  <Typography variant="body2" paragraph>
-                    <LocationOn fontSize="small" sx={{ mr: 1, verticalAlign: 'middle' }} />
-                    {job.location}
-                  </Typography>
                   <Typography variant="body2" paragraph>
                     {job.description}
                   </Typography>
-                  <Box sx={{ mt: 2 }}>
-                    {job.skills.map((skill) => (
-                      <Chip key={skill} label={skill} size="small" sx={{ mr: 1, mb: 1 }} />
-                    ))}
-                  </Box>
+                  <Typography variant="caption" color="textSecondary">
+                    {job.lastUpdated}
+                  </Typography>
                 </CardContent>
-                <CardActions>
+                <CardActions sx={{ justifyContent: 'space-between', padding: '16px' }}>
                   <Button size="small" color="primary">
                     Learn More
                   </Button>
-                  <Button size="small" color="primary">
+                  <Button size="small" color="primary" variant="contained" href={job.applyLink} target="_blank" rel="noopener noreferrer">
                     Apply Now
                   </Button>
                 </CardActions>
@@ -153,3 +132,4 @@ function JobListings() {
 }
 
 export default JobListings;
+

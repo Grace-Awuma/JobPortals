@@ -16,4 +16,4 @@ export const loginUser = async (data) => {
         console.error("Error during login:", error);
         return error;
       }
-  }
+  } 

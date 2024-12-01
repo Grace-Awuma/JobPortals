@@ -8,7 +8,7 @@ const Footer = () => {
         <Typography variant="body2" color="text.secondary" align="center">
           © {new Date().getFullYear()} Job Portal. All rights reserved.
         </Typography>
-      </Container>
+      </Container>     
     </Box>
   );
 };
